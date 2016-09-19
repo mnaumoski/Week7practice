@@ -8,7 +8,10 @@
 </head>
 
 <body>
-    <p>After each click, the firebase databas will show the click counter go up.</p>
+    <h2>You've clicked me <span id="clickVal"></span> times!</h2>
+
+    <p>After each click, the firebase database (and the text above) will show the click counter go up.</p>
+
     <!-- creating button -->
     <button class="btn btn-info" type="submit" id="clickBtn">Click me please!</button>
     <!-- add jquery -->
@@ -33,6 +36,9 @@
     // the click counter that starts at 0
     var counter = 0;
 
+    //Functions================================================================
+
+
     // on click
     $("#clickBtn").on('click', function() {
 
@@ -43,8 +49,22 @@
         // .set() sets the actual counter
         database.ref().set({
             fireCounter: counter
-        })
+        });
     })
+
+    database.ref().on("value", function(status) {
+
+      // print the status to console
+      console.log(status.val());
+
+      $("#clickVal").html(status.val().fireCounter);
+
+      // update the value in counter; this prevents the counter from going back to zero after reopening
+      counter = status.val().fireCounter;
+
+    })
+
+
     </script>
 </body>
 
