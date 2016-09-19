@@ -10,8 +10,10 @@
 <body>
     <h2>You've clicked me <span id="clickVal"></span> times!</h2>
     <p>After each click, the firebase database (and the text above) will show the click counter go up.</p>
-    <!-- creating button -->
+    <!-- creating a submit button -->
     <button class="btn btn-info" type="submit" id="clickBtn">Click me please!</button>
+    <!-- creating a restart button -->
+    <button class="btn btn-danger" id="clearBtn">Restart</button>
     <!-- add jquery -->
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <!-- ============================================================================== -->
@@ -31,42 +33,61 @@
     // set variables
     var database = firebase.database();
 
-    // the click counter that starts at 0
-    var counter = 0;
+    var initialValue = 100;
+
+    // the click counter that starts at 100;
+    var counter = initialValue;
 
     //Functions================================================================
 
+    //  see what the status is
+    database.ref().on("value", function(status) {
 
-    // on click
+        // print initial data to console
+        console.log(status.val()); //this prints the whole object
+        console.log(status.val().fireCounter); //whereas this prints the number of clicks
+
+        $("#clickVal").html(status.val().fireCounter);
+        counter = status.val().fireCounter;
+        console.log(counter);
+
+        $("#clickVal").html(counter);
+        // in case of error
+    }, function(errorObject) {
+        console.log(errorObject.code + " is weird!")
+    });
+
+    // on click ==================================================
     $("#clickBtn").on('click', function() {
 
-        counter++;
+        counter--; //decreases from 100 or whatever the intial value has been left with from the counter
 
-        // store the number of clicks to firebas in a json property called fireCounter
-        // the blank ref() saves the info to the root dir
-        // .set() sets the actual counter
+        if (counter == 0) {
+            alert("Now that was a lot of clicks");
+            counter = initialValue; //reset the counter
+        }
+
         database.ref().set({
             fireCounter: counter
         });
+
+        console.log(counter);
+
+        // store the number of clicks to firebase in a json property called fireCounter
+        // the blank ref() saves the info to the root dir
+        // .set() sets the actual counter
+    });
+    $("#clearBtn").on("click", function() {
+        counter = initialValue; //restart the counter 100
+        //save it to firebase
+        database.ref().set({
+            fireCounter: counter
+        });
+        //change it in HTML
+        $("#clickVal").html(counter);
+
+
     })
-
-    database.ref().on("value", function(status) {
-
-            // print the status to console
-            console.log(status.val());
-
-            $("#clickVal").html(status.val().fireCounter);
-
-            // update the value in counter; this prevents the counter from going back to zero after reopening
-            counter = status.val().fireCounter;
-
-        }, function(errorObject) {
-
-            // if there is an error print this
-            console.log('The read failed: ' + errorObject.code);
-        }
-
-    );
     </script>
 </body>
 
