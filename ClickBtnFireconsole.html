@@ -9,9 +9,7 @@
 
 <body>
     <h2>You've clicked me <span id="clickVal"></span> times!</h2>
-
     <p>After each click, the firebase database (and the text above) will show the click counter go up.</p>
-
     <!-- creating button -->
     <button class="btn btn-info" type="submit" id="clickBtn">Click me please!</button>
     <!-- add jquery -->
@@ -54,17 +52,21 @@
 
     database.ref().on("value", function(status) {
 
-      // print the status to console
-      console.log(status.val());
+            // print the status to console
+            console.log(status.val());
 
-      $("#clickVal").html(status.val().fireCounter);
+            $("#clickVal").html(status.val().fireCounter);
 
-      // update the value in counter; this prevents the counter from going back to zero after reopening
-      counter = status.val().fireCounter;
+            // update the value in counter; this prevents the counter from going back to zero after reopening
+            counter = status.val().fireCounter;
 
-    })
+        }, function(errorObject) {
 
+            // if there is an error print this
+            console.log('The read failed: ' + errorObject.code);
+        }
 
+    );
     </script>
 </body>
 
