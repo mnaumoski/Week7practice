@@ -12,68 +12,100 @@
 
 <body>
     <div class="jumbotron">
-        <h1>Sign in sheet</h1>
+        <h1>Sign Up Today!</h1>
     </div>
-    <div class="container">
-        <form>
-            <div class="form-group">
-                <label for="text"> Name </label>
-                <input type="text" class="form-control" id="nameInput" placeholder="name">
-            </div>
-            <div class="form-group">
-                <label for="text">Age</label>
-                <input type="text" id="ageInput" class="form-control" placeholder="age">
-            </div>
-            <div class="form-group">
-                <label for="text"> Phone </label>
-                <input type="number" class="form-control" id="phoneInput" placeholder="phone">
-            </div>
-            <!-- Submit button -->
-            <button type="submit" class="btn btn-default" id="clickButton">Submit</button>
-        </form>
-    </div>
-    <br>
-    <div class="container">
-        <div id="displayData" class="well">
-        </div>
-    </div>
-    <!-- script -->
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <!-- intitialize firebase -->
-    <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
-    <script>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"> New Member Sign-in</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="text"> Name </label>
+                            <input type="text" class="form-control" id="nameInput" placeholder="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="text">Age</label>
+                            <input type="number" id="ageInput" class="form-control" placeholder="age">
+                        </div>
+                        <div class="form-group">
+                            <label for="text"> E-mail </label>
+                            <input type="email" class="form-control" id="emailInput" placeholder=" ex: mail@mail.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment">How did you hear about us?</label>
+                            <textarea class="form-control" rows="5" id="commentInput"></textarea>
+                        </div>
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-default" id="clickButton">Submit</button>
+                    </form>
+                </div>
+                <br>
+                <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Most recent member</h3>
+                        </div>
+                        <div class="panel-body" id="recentMember">
+                            <h2></h2>
+                            <h2></h2>
+                            <h2></h2>
+                            <h2></h2>
+                        </div>
+                    </div>
+                </div>
+                <!-- script -->
+                <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+                <!-- intitialize firebase -->
+                <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+                <script>
+                // Initialize Firebase
+                var config = {
+                    apiKey: "AIzaSyD_6_GUQmiN7r8pmN81wsM9Y-W9yZMKoec",
+                    authDomain: "myfirstproject-b8495.firebaseapp.com",
+                    databaseURL: "https://myfirstproject-b8495.firebaseio.com",
+                    storageBucket: "myfirstproject-b8495.appspot.com",
+                    messagingSenderId: "987361683260"
+                };
+                firebase.initializeApp(config);
 
-    // Initialize Firebase
-    var config = {
-        apiKey: "AIzaSyD_6_GUQmiN7r8pmN81wsM9Y-W9yZMKoec",
-        authDomain: "myfirstproject-b8495.firebaseapp.com",
-        databaseURL: "https://myfirstproject-b8495.firebaseio.com",
-        storageBucket: "myfirstproject-b8495.appspot.com",
-        messagingSenderId: "987361683260"
-    };
-    firebase.initializeApp(config);
+                // variables++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    // variables++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                // firebase var
+                var database = firebase.database();
 
-    // firebase var
-    var database = firebase.database();
+                //initial variables
+                var name = "";
+                var age = "";
+                var phone = "";
 
-    //initial variables
-    var name = "";
-    var age = "";
-    var phone = "";
+                $("#clickButton").on("click", function() {
+                    // text inputs from the form into the variables when submit is clicked
+                    name = $("#nameInput").val().trim();
+                    age = $("#ageInput").val().trim();
+                    phone = $("#phoneInput").val().trim();
 
-    $("#clickButton").on("click", function () {
-      // text inputs from the form into the variables when submit is clicked
-      name = $("#nameInput").val().trim();
-      age = $("#ageInput").val().trim();
-      phone = $("#phoneInput").val().trim();
-      
-    })
+                    database.ref().set({
+                        name: name,
+                        age: age,
+                        phone: phone
+                    });
 
+                    return false;
+                })
+                database.ref().on("value", function(status) {
 
+                    console.log(status.val());
+                    //dump it in the div
+                    $("#displayData").html(status.val().name + " | " + status.val().age + " | " + status.val().phone);
+                }, function(errorObject) {
+                    console.log('The read failed: ' + errorObject.code); //returns error msg with the incorrect code
+                })
 
-    </script>
+                //
+                </script>
 </body>
 
 </html>
