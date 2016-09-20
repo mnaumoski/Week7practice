@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Coders' Bay</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="jumbotron">
+        <h1 class="text-center">Welcome to Coders' Bay</h1>
+        <h3 class="text-center">Where bidders win big</h3>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3 class="text-center">Today's sale: Pure Knowledge</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Make your bid</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <img class="text-center" src="brainPic.jpeg">
+                        </div>
+                        <div class="col-sm-6">
+                            <h3>Highest Bidder: <span id="highestBidder"></span></h3>
+                            <h3>Current Price: <span id="highestPrice"></span></h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Make your bid</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <form>
+                                            <div class="form-group">
+                                                <label for="bidderName">Your Name</label>
+                                                <input type="text" class="form-control" id="bidderName">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="bidderPrice">Your Price</label>
+                                                <input type="text" class="form-control" id="bidderPrice">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary" id="submitBid">Submit</button>
+                                        </form>
+                                    </div>
+                                </div>
+<!-- Javascipt links -->
+<script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="codersBay.js"></script>
+</body>
+
+</html>
