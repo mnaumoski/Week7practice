@@ -42,70 +42,82 @@
                         <button type="submit" class="btn btn-default" id="clickButton">Submit</button>
                     </form>
                 </div>
-                <br>
-                <div class="col-lg-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Most recent member</h3>
-                        </div>
-                        <div class="panel-body" id="recentMember">
-                            <h2></h2>
-                            <h2></h2>
-                            <h2></h2>
-                            <h2></h2>
-                        </div>
-                    </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Most recent member</h3>
                 </div>
-                <!-- script -->
-                <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-                <!-- intitialize firebase -->
-                <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
-                <script>
-                // Initialize Firebase
-                var config = {
-                    apiKey: "AIzaSyD_6_GUQmiN7r8pmN81wsM9Y-W9yZMKoec",
-                    authDomain: "myfirstproject-b8495.firebaseapp.com",
-                    databaseURL: "https://myfirstproject-b8495.firebaseio.com",
-                    storageBucket: "myfirstproject-b8495.appspot.com",
-                    messagingSenderId: "987361683260"
-                };
-                firebase.initializeApp(config);
+                <div class="panel-body" id="recentMember">
+                    <h2 id="nameDisplay"></h2>
+                    <h2 id="ageDisplay"></h2>
+                    <h2 id="emailDisplay"></h2>
+                    <p id="commentDisplay"></p>
+                </div>
+            </div>
+        </div>
+        <!-- script -->
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+        <!-- intitialize firebase -->
+        <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+        <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyD_6_GUQmiN7r8pmN81wsM9Y-W9yZMKoec",
+            authDomain: "myfirstproject-b8495.firebaseapp.com",
+            databaseURL: "https://myfirstproject-b8495.firebaseio.com",
+            storageBucket: "myfirstproject-b8495.appspot.com",
+            messagingSenderId: "987361683260"
+        };
+        firebase.initializeApp(config);
 
-                // variables++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // variables++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-                // firebase var
-                var database = firebase.database();
+        // firebase var
+        var database = firebase.database();
 
-                //initial variables
-                var name = "";
-                var age = "";
-                var phone = "";
+        //initial variables
+        var name = "";
+        var email = "";
+        var age = 0;
+        var comment = "";
 
-                $("#clickButton").on("click", function() {
-                    // text inputs from the form into the variables when submit is clicked
-                    name = $("#nameInput").val().trim();
-                    age = $("#ageInput").val().trim();
-                    phone = $("#phoneInput").val().trim();
+        // button click
+        $("#clickButton").on("click", function() {
+            // text inputs from the form into the variables when submit is clicked
+            name = $("#nameInput").val().trim();
+            age = $("#ageInput").val().trim();
+            email = $("#emailInput").val().trim();
+            comment = $("#commentInput").val().trim();
 
-                    database.ref().set({
-                        name: name,
-                        age: age,
-                        phone: phone
-                    });
+            database.ref().set({
+                name: name,
+                age: age,
+                email: email,
+                comment: comment
+            });
 
-                    return false;
-                })
-                database.ref().on("value", function(status) {
+            return false;
+        })
+        database.ref().on("value", function(status) {
+            // print in the console
+            console.log(status.val());
+            console.log(status.val().name);
+            console.log(status.val().age);
+            console.log(status.val().email);
+            console.log(status.val().comment)
+                //dump it in the display id for each 
+            $("#nameDisplay").html(status.val().name);
+            $("#ageDisplay").html(status.val().age);
+            $("#emailDisplay").html(status.val().email);
+            $("#commentDisplay").html(status.val().comment);
+        }, function(errorObject) {
+            console.log('The read failed: ' + errorObject.code); //returns error msg with the incorrect code
+        })
 
-                    console.log(status.val());
-                    //dump it in the div
-                    $("#displayData").html(status.val().name + " | " + status.val().age + " | " + status.val().phone);
-                }, function(errorObject) {
-                    console.log('The read failed: ' + errorObject.code); //returns error msg with the incorrect code
-                })
-
-                //
-                </script>
+        //
+        </script>
 </body>
 
 </html>
