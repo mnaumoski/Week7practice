@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sign-in Sheet</title>
+    <!-- Bootstrap reference -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Firebase reference -->
+    <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+</head>
+
+<body>
+    <div class="jumbotron">
+        <h1>Sign in sheet</h1>
+    </div>
+    <div class="container">
+        <form>
+            <div class="form-group">
+                <label for="text"> Name </label>
+                <input type="text" class="form-control" id="nameInput" placeholder="name">
+            </div>
+            <div class="form-group">
+                <label for="text">Age</label>
+                <input type="text" id="ageInput" class="form-control" placeholder="age">
+            </div>
+            <div class="form-group">
+                <label for="text"> Phone </label>
+                <input type="number" class="form-control" id="phoneInput" placeholder="phone">
+            </div>
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-default" id="clickButton">Submit</button>
+        </form>
+    </div>
+    <br>
+    <div class="container">
+        <div id="displayData" class="well">
+        </div>
+    </div>
+    <!-- script -->
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <!-- intitialize firebase -->
+    <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+    <script>
+
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyD_6_GUQmiN7r8pmN81wsM9Y-W9yZMKoec",
+        authDomain: "myfirstproject-b8495.firebaseapp.com",
+        databaseURL: "https://myfirstproject-b8495.firebaseio.com",
+        storageBucket: "myfirstproject-b8495.appspot.com",
+        messagingSenderId: "987361683260"
+    };
+    firebase.initializeApp(config);
+
+    // variables++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    // firebase var
+    var database = firebase.database();
+
+    //initial variables
+    var name = "";
+    var age = "";
+    var phone = "";
+
+    $("#clickButton").on("click", function () {
+      // text inputs from the form into the variables when submit is clicked
+      name = $("#nameInput").val().trim();
+      age = $("#ageInput").val().trim();
+      phone = $("#phoneInput").val().trim();
+      
+    })
+
+
+
+    </script>
+</body>
+
+</html>
