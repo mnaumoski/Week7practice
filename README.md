@@ -12,3 +12,5 @@ Practice week 7 challenging tasks.
 3. CodersBay exercise;
 
 4. Adding and removing connections and creating specifiv pathways to store data
+
+5. Saturday's practice: timesheet, train predictions,..
