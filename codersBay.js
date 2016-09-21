@@ -17,9 +17,27 @@
   var highBidder = initialBidder;
   var highPrice = initialBid;
 
+  var viewCounter = 0;
+
+  var connections = database.ref("/connections"); //dir in database
+  var connected = database.ref(".info/connected"); //is there a connection?
+
+  connected.on("value", function(status) {
+
+      if (status.val()) {
+          var con = connections.push(true);
+          con.onDisconnect().remove();
+
+      };
+  });
+  connections.on("value", function(status) {
+      $("#watchers").html(status.numChildren());
+  })
+
+
   // ======================================= = = ===============================
-  // get status
-  database.ref().on("value", function(status) {
+  // AT initial load - get status
+  database.ref("/bidderData").on("value", function(status) {
       //if firebase has stored values for highBidder and highPrice
       if (status.child("highBidder").exists() && status.child("highPrice").exists()) {
 
@@ -34,14 +52,14 @@
           console.log(status.val().highPrice);
       }
       // keep the initial vars equal to initial values of zero and nobody
-      else{
-        $("#highestBidder").html(highBidder);
-        $("#highestPrice").html("$" + highPrice);
-        console.log('Current High Price: ' + " " + highBidder +" "+ highPrice);
-        console.log("-------------------------------------------------------");
+      else {
+          $("#highestBidder").html(highBidder);
+          $("#highestPrice").html("$" + highPrice);
+          console.log('Current High Price: ' + " " + highBidder + " " + highPrice);
+          console.log("-------------------------------------------------------");
       }
       // watch for errors
-    }, function (errorObject) {
+  }, function(errorObject) {
       console.log('The read failed ' + errorObject.code);
   });
 
@@ -55,17 +73,23 @@
       console.log(bidderPrice);
 
       if (bidderPrice > highPrice) {
-        alert("You are now the highest bidder!");
-        // save it to firebase
-        database.ref().set({
-          highBidder: bidderName,
-          highPrice: bidderPrice
-        });
-        console.log('New High Price: ' + " " + highBidder + " " + highPrice);
-        console.log("-------------------------------------------------------");
+          alert("You are now the highest bidder!");
+          // save it to firebase
+          database.ref("/bidderData").set({
+              highBidder: bidderName,
+              highPrice: bidderPrice
+          });
+          console.log('New High Price: ' + " " + highBidder + " " + highPrice);
+          console.log("-------------------------------------------------------");
+
+          highBidder = bidderName;
+          highPrice = parseInt(bidderPrice);
+
+          $("#highestPrice").html(bidderName);
+          $("#highestBidder").html("$" + bidderPrice);
 
       } else {
-        alert("Sorry that bid is too low. Try again!");
+          alert("Sorry that bid is too low. Try again!");
       }
 
       return false;
