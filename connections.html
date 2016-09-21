@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Click that button using Firebase</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+    <h2>Only <span id="clickVal"></span> to go!</h2>
+    <!-- creating a submit button -->
+    <button class="btn btn-info" type="submit" id="clickBtn">Click me please!</button>
+    <!-- creating a restart button -->
+    <button class="btn btn-danger" id="restartBtn">Restart</button>
+    <!-- number of connections -->
+    <h3>There are  <span id="watchers"> 9 </span> people watching you click.</h3>
+    <!-- add jquery -->
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <!-- ============================================================================== -->
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+    <script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyBgQJAYYGHFKAsPNT7_ZZ3xEKof0D7fX_o",
+        authDomain: "practice-781aa.firebaseapp.com",
+        databaseURL: "https://practice-781aa.firebaseio.com",
+        storageBucket: "",
+        messagingSenderId: "554967693821"
+    };
+    firebase.initializeApp(config);
+
+    // set variables
+    var database = firebase.database();
+
+    var initialValue = 100;
+
+    // the click counter that starts at 100;
+    var counter = initialValue;
+    // this is a specific location in the database
+    //all of the conncetions will be stored in this dir
+    var connectionsRef = database.ref("/connections");
+
+    // connectedRef var has boolean value of whther the sttus is connected (true) or false
+    var connectedRef = database.ref(".info/connected");
+
+    // when the connection status changes
+    connectedRef.on("value", function(status) {
+
+        // when there is a connection
+        if (status.val()) {
+            var con = connectionsRef.push(true); //var con establishes relationship of the status (and value) to the conncetionsRef
+            con.onDisconnect().remove(); //remove user from connection list thus remove it fro connected
+        };
+    });
+    connectionsRef.on("value", function(status) {
+        $("#watchers").html(status.numChildren());//or number of dirs in the firebase
+    })
+
+
+    //  see what the status is
+    database.ref('/clicks').on("value", function(status) {
+
+        // print initial data to console
+        console.log(status.val()); //this prints the whole object
+
+        $("#clickVal").html(status.val().fireCounter);
+        counter = status.val().fireCounter;
+        console.log(counter);
+
+        $("#clickVal").html(counter);
+        // in case of error
+    }, function(errorObject) {
+        console.log(errorObject.code + " is weird!")
+    });
+
+    // on click ==================================================
+    $("#clickBtn").on('click', function() {
+
+        counter--; //decreases from 100 or whatever the intial value has been left with from the counter
+
+        if (counter == 0) {
+            alert("Now that was a lot of clicks");
+            counter = initialValue; //reset the counter
+        }
+
+        database.ref('/clicks').set({
+            fireCounter: counter
+        });
+
+        console.log(counter);
+
+        // store the number of clicks to firebase in a json property called fireCounter
+        // the blank ref() saves the info to the root dir
+        // .set() sets the actual counter
+    });
+    $("#restartBtn").on("click", function() {
+        counter = initialValue; //restart the counter 100
+        //save it to firebase
+        database.ref('/clicks').set({
+            fireCounter: counter
+        });
+        //change it in HTML
+        $("#clickVal").html(counter);
+
+
+    })
+    </script>
+</body>
+
+</html>
