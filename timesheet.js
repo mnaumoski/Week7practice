@@ -1,17 +1,18 @@
-$(document).ready(function() {
-    // Initialize Firebase
-    var config = {
+var config = {
         apiKey: "AIzaSyDZIBk1N1VLk4UQPoXZ_nQXBEJ7pj6xZTk",
         authDomain: "employeedata-4a108.firebaseapp.com",
         databaseURL: "https://employeedata-4a108.firebaseio.com",
         storageBucket: "employeedata-4a108.appspot.com",
-        // messagingSenderId: "818698221016"
+        messagingSenderId: "818698221016"
     };
     firebase.initializeApp(config);
 
     var database = firebase.database();
+
+$(document).ready(function() {
+    // Initialize Firebase
     // 2. Button for adding Employees
-    $("#addEmployeeBtn").on("submit", function() {
+    $("#addEmployeeBtn").on("submit", function(event) {
         // grab inputs
         var empName = $("#employeeNameInput").val().trim();
         var empRole = $("#roleInpute").val().trim();
@@ -41,7 +42,9 @@ $(document).ready(function() {
         $("#startInput").val("");
         $("#rateInput").val("");
 
-        prevent.Default();
+        event.preventDefault();
+        event.stopPropagation(); //tried both of these...
+        return false;
 
 
     });
