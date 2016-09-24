@@ -1,23 +1,27 @@
-var config = {
-        apiKey: "AIzaSyDZIBk1N1VLk4UQPoXZ_nQXBEJ7pj6xZTk",
-        authDomain: "employeedata-4a108.firebaseapp.com",
-        databaseURL: "https://employeedata-4a108.firebaseio.com",
-        storageBucket: "employeedata-4a108.appspot.com",
-        messagingSenderId: "818698221016"
-    };
-    firebase.initializeApp(config);
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDZIBk1N1VLk4UQPoXZ_nQXBEJ7pj6xZTk",
+    authDomain: "employeedata-4a108.firebaseapp.com",
+    databaseURL: "https://employeedata-4a108.firebaseio.com",
+    storageBucket: "employeedata-4a108.appspot.com",
+    messagingSenderId: "818698221016"
+  };
+  firebase.initializeApp(config);
 
     var database = firebase.database();
 
-$(document).ready(function() {
+    console.log("test");
     // Initialize Firebase
     // 2. Button for adding Employees
-    $("#addEmployeeBtn").on("submit", function(event) {
+    $("#addEmployeeBtn").on("click", function() {
+
         // grab inputs
         var empName = $("#employeeNameInput").val().trim();
-        var empRole = $("#roleInpute").val().trim();
-        var empRate = $("#rateInput").val().trim();
+        var empRole = $("#roleInput").val().trim();
         var empStart = moment($("#startInput").val().trim(), "DD/MM/YY").format("X");
+        var empRate = $("#rateInput").val().trim();
+
+        console.log("test");
 
         var newEmp = {
             name: empName,
@@ -42,11 +46,10 @@ $(document).ready(function() {
         $("#startInput").val("");
         $("#rateInput").val("");
 
-        event.preventDefault();
-        event.stopPropagation(); //tried both of these...
         return false;
 
-
+        // event.preventDefault();
+        // event.stopPropagation(); //tried both of these...
     });
 
     // create Firebase event for adding employee to the database and a row in the html when a user adds an entry
@@ -75,4 +78,3 @@ $(document).ready(function() {
         // add each data to the table
         $("#employeeTable > tbody").append('<tr><td>' + empName + '</td><td>' + empRole + '</td><td>' + empStartPretty + '</td><td>' + empMonths + '</td><td>' + empRate + '</td><td>' + empBilled + '</td></tr>');
     });
-});
